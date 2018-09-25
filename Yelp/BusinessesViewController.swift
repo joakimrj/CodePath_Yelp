@@ -8,16 +8,20 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet weak var tableView: UITableView!
+class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
+    @IBOutlet weak var tableView: UITableView!
+    let searchBar = UISearchBar()
     var businesses: [Business]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 120
+        
+        Business.searchWithTerm(term: "", completion: { (businesses: [Business]?, error: Error?) -> Void in
             
                 self.businesses = businesses
                 self.tableView.reloadData()
@@ -31,7 +35,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             }
         )
         
-        /* Example of Yelp search with more search options specified
+    /*Example of Yelp search with more search options specified
          Business.searchWithTerm(term: "Restaurants", sort: .distance, categories: ["asianfusion", "burgers"]) { (businesses, error) in
                 self.businesses = businesses
                  for business in self.businesses {
@@ -39,8 +43,77 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
                      print(business.address!)
                  }
          }
-         */
+        */
         
+        searchBar.delegate = self
+       // let searchController = UISearchController()
+        searchBar.sizeToFit()
+        navigationItem.titleView = searchBar
+        
+      /*  searchController.searchBar.sizeToFit()
+        navigationItem.titleView = searchController.searchBar
+        searchController.hidesNavigationBarDuringPresentation = false*/
+
+    }
+    // This method updates filteredData based on the text in the Search Box
+    func searchBarSearchButtonClicked( _ searchBar: UISearchBar)
+    {
+        Business.searchWithTerm(term: searchBar.text ?? "", completion: { (businesses: [Business]?, error: Error?) -> Void in
+            
+            self.businesses = businesses
+            self.tableView.reloadData()
+            if let businesses = businesses {
+                for business in businesses {
+                    print(business.name!)
+                    print(business.address!)
+                }
+            }
+            
+        }
+        )
+        
+        tableView.reloadData()
+    }
+  /*  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        Business.searchWithTerm(term: searchText, completion: { (businesses: [Business]?, error: Error?) -> Void in
+            
+            self.businesses = businesses
+            self.tableView.reloadData()
+            if let businesses = businesses {
+                for business in businesses {
+                    print(business.name!)
+                    print(business.address!)
+                }
+            }
+            
+        }
+        )
+        
+        tableView.reloadData()
+    }*/
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.searchBar.showsCancelButton = true
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+        Business.searchWithTerm(term: searchBar.text ?? "", completion: { (businesses: [Business]?, error: Error?) -> Void in
+            
+            self.businesses = businesses
+            self.tableView.reloadData()
+            if let businesses = businesses {
+                for business in businesses {
+                    print(business.name!)
+                    print(business.address!)
+                }
+            }
+            
+        }
+        )
+        
+        tableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
