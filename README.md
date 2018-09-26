@@ -30,9 +30,9 @@ Please list two areas of the assignment you'd like to **discuss further with you
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
-
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
-
+</br>
+<a href="https://imgur.com/5xtNaJr"><img src="https://i.imgur.com/5xtNaJr.gif" title="source: imgur.com" /></a>
+</br>
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
